@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "18.20.6",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.24.0"
+    },
+    "version": "1.20.0",
+    "libraryName": "crud-operation",
+    "libraryId": "ba0d13f8-8b8c-479b-a8f7-c2af6beb21fa",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "CrudOperation",
+    "solutionShortDescription": "CrudOperation description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
