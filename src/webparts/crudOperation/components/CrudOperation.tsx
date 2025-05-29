@@ -2,6 +2,7 @@ import * as React from 'react';
 // import styles from './CrudOperation.module.scss';
 import type { ICrudOperationProps } from './ICrudOperationProps';
 import { spfi,SPFx } from '@pnp/sp/presets/all';
+import { DefaultButton, DetailsList, Dialog, DialogFooter, DialogType, IconButton, PrimaryButton, SelectionMode, TextField } from '@fluentui/react';
 
 interface ICrudOperationState{
   Title:string;
@@ -31,7 +32,7 @@ const CrudOperation=(props:ICrudOperationProps):React.ReactElement=>{
    const _getAllItems=async()=>{
     try{
       const items=await _sp.web.lists.getByTitle(props.ListName).items();
-      setStates(items.map((item:any)=>({
+      setStates(items.map((item:ICrudOperationState)=>({
         name:item.Title,
         email:item.EmailAddress,
         id:item.Id
@@ -66,7 +67,9 @@ EmailAddress:newEmail
    //opent dialog
    const _openEditDialog=(id:number)=>{
     setCurentId(id);
+
     //this function will open the dialog and expose the form
+     setIsEditHidden(false);
     const item:ICrud|undefined=states.find((each:any)=>each.id===id);
     if(item){
       setEditTitle(item.name);
@@ -76,7 +79,7 @@ EmailAddress:newEmail
     const handleEditTitle=(event:React.ChangeEvent<HTMLInputElement>)=>{
     setEditTitle(event.target.value);
    }
-    const handleEditwEmail=(event:React.ChangeEvent<HTMLInputElement>)=>{
+    const handleEditEmail=(event:React.ChangeEvent<HTMLInputElement>)=>{
     setEditEmail(event.target.value);
    }
 //update item
@@ -109,6 +112,117 @@ const _deleteItem=async(id:number)=>{
 }
   return(
     <>
+    <div className='TitleBox'>
+      <h2>Editable Table</h2>
+      <div className='TitleContainer'>
+<DetailsList
+items={states||[]}
+columns={[
+  {key:'Name',
+    name:'Title',
+    fieldName:'Title',
+    minWidth:100,
+    isResizable:true,
+    onRender:(item:ICrud)=><div>{item.name}</div>
+  },
+    {key:'Email',
+    name:'Email',
+    fieldName:'EmailAddress',
+    minWidth:100,
+    isResizable:true,
+    onRender:(item:ICrud)=><div>{item.email}</div>
+  },
+  {
+    key:'ActionColumn',
+    name:'Action',
+    fieldName:'Action',
+    minWidth:100,
+    isResizable:true,
+   onRender:(item:ICrud)=>(
+    <div>
+      <IconButton
+      iconProps={{iconName:'edit'}}
+      onClick={()=>_openEditDialog(item.id)}
+      title='Edit'
+      ariaLabel='Edit'
+      />
+      <IconButton
+      iconProps={{iconName:'delete'}}
+      onClick={()=>_deleteItem(item.id)}
+      title='Delete'
+      ariaLabel='Delete'
+      />
+
+      </div>
+   )
+  }
+  
+]}
+selectionMode={SelectionMode.none}
+/>
+     <Dialog
+     hidden={isEditHidden}
+     onDismiss={()=>setIsEditHidden(true)}
+     dialogContentProps={{
+      type:DialogType.normal,
+      title:'Edit Form'
+     }}
+     >
+      <div>
+        <TextField
+        label='Name'
+        value={editTitle}
+        onChange={handleEditTitle}
+        />
+            <TextField
+        label='Email'
+        value={editEmail}
+        onChange={handleEditEmail}
+        />
+      </div>
+      <DialogFooter>
+<PrimaryButton text='Save' onClick={()=>_updateItem()}
+  iconProps={{iconName:'save'}}/>
+<DefaultButton text='Cancel' onClick={()=>setIsEditHidden(true)}
+  iconProps={{iconName:'cancel'}}/>
+      </DialogFooter>
+      </Dialog>   
+      </div>
+    </div>
+    <div>
+      <PrimaryButton
+      text='Add Item'
+      iconProps={{iconName:'add'}}
+      onClick={()=>setIsAddHidden(false)}
+      />
+      <Dialog
+      hidden={isAddHidden}
+      onDismiss={()=>setIsAddHidden(true)}
+      dialogContentProps={{
+        type:DialogType.normal,
+        title:'Add item'
+      }}
+      >
+       <TextField
+        label='Name'
+        value={newTitle}
+        onChange={handleNewTitle}
+        />
+            <TextField
+        label='Email'
+        value={newEmail}
+        onChange={handleNewEmail}
+        />
+    
+    <DialogFooter>
+      <PrimaryButton text='Save' onClick={()=>_addItem()}
+  iconProps={{iconName:'save'}}/>
+<DefaultButton text='Cancel' onClick={()=>setIsEditHidden(true)}
+  iconProps={{iconName:'cancel'}}/>
+    </DialogFooter>
+    </Dialog>
+
+    </div>
     </>
   )
 }
