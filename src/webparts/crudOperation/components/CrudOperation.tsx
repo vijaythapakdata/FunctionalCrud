@@ -55,13 +55,15 @@ const CrudOperation=(props:ICrudOperationProps):React.ReactElement=>{
       await list.items.add({
 Title:newTitle,
 EmailAddress:newEmail
-      })
+      });
+      setIsAddHidden(true);
+      setReload(!reload)
     }
     catch(error){
       console.error("Error adding item: ", error);
     }
     finally{
-      setReload(!reload);
+      setIsAddHidden(true);
     }
    }
    //opent dialog
@@ -90,12 +92,14 @@ const _updateItem=async()=>{
       Title:editTitle,
       EmailAddress:editEmail
     })
+    setIsEditHidden(true);
+    setReload(!reload)
   }
   catch(error){
     console.error("Error updating item: ", error);
   }
   finally{
-    setReload(!reload);
+   setIsEditHidden(true);
   }
 } 
 //delete item
@@ -217,7 +221,7 @@ selectionMode={SelectionMode.none}
     <DialogFooter>
       <PrimaryButton text='Save' onClick={()=>_addItem()}
   iconProps={{iconName:'save'}}/>
-<DefaultButton text='Cancel' onClick={()=>setIsEditHidden(true)}
+<DefaultButton text='Cancel' onClick={()=>setIsAddHidden(true)}
   iconProps={{iconName:'cancel'}}/>
     </DialogFooter>
     </Dialog>
