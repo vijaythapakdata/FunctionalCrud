@@ -9,10 +9,19 @@
           "manifest": "./src/webparts/crudOperation/CrudOperationWebPart.manifest.json"
         }
       ]
+    },
+    "handling-large-list-data-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/handlingLargeListData/HandlingLargeListDataWebPart.js",
+          "manifest": "./src/webparts/handlingLargeListData/HandlingLargeListDataWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "CrudOperationWebPartStrings": "lib/webparts/crudOperation/loc/{locale}.js"
+    "CrudOperationWebPartStrings": "lib/webparts/crudOperation/loc/{locale}.js",
+    "HandlingLargeListDataWebPartStrings": "lib/webparts/handlingLargeListData/loc/{locale}.js"
   }
 }
